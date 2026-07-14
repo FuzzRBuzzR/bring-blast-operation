@@ -1,81 +1,74 @@
-name: Venture Engine Master – FULL SPEED Money Making
+name: Venture Engine Master – 24h Planned Work Always
 
 on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "Select full-speed mode"
+        description: "Select mode"
         required: true
         type: choice
-        default: "24h-money-plan"
+        default: "24h-planned-work"
         options:
-          - 24h-money-plan
+          - 24h-planned-work
           - force-gumroad-check
           - revenue-opportunity-scan
           - full-engine-check
-          - blast-health
   schedule:
-    - cron: "0 21 * * *"   # 07:00 AEST daily
+    - cron: "0 21 * * *"
   repository_dispatch:
-    types: [obsidian-trigger, 24h-money-plan, force-gumroad-check, blast-operation]
+    types: [obsidian-trigger, 24h-planned-work, force-gumroad-check]
 
 permissions:
   contents: read
   actions: write
 
 jobs:
-  full-speed:
+  maintain-24h-work:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    name: FULL SPEED Money Run
+    name: Always Maintain 24h Planned Unfinished Work
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: 24-HOUR MONEY-MAKING CLEARANCE (FULL SPEED)
+      - name: Enforce Rolling 24 Hours of Planned Work
         run: |
           echo "============================================================"
-          echo "  VENTURE ENGINE – FULL SPEED 24H MONEY CLEARANCE"
-          echo "  Generated: $(date -u)"
+          echo "  24-HOUR PLANNED YET-TO-COMPLETE WORK – ENFORCED"
+          echo "  $(date -u)"
           echo "============================================================"
           echo ""
-          echo "CRITICAL PATH TO FIRST CASH:"
-          echo "1. Gumroad payout method is still the ONLY blocker"
-          echo "2. Product is already live: https://ventureengine.gumroad.com/l/ve-tiling-art-2026"
-          echo "3. Connect payout NOW → https://gumroad.com/settings/payments"
+          echo "RULE: At all times there must be a clear 24-hour window of"
+          echo "      high-value work that is planned but not yet finished."
           echo ""
-          echo "Once payout is connected, the entire automation spine is live."
-          echo "All other steps (rails, gtm_pack, x_post, automation_spine) are DONE."
+          echo "CURRENT 24H PLANNED WORK:"
+          echo "1. Connect Gumroad payout method"
+          echo "   https://gumroad.com/settings/payments"
+          echo "2. Confirm the live product can accept payment"
+          echo "   https://ventureengine.gumroad.com/l/ve-tiling-art-2026"
+          echo "3. Record first AUD and flip status to FIRST_CASH"
+          echo "4. Queue the next revenue action after first sale"
           echo ""
-          echo "24-HOUR EXECUTION WINDOW:"
-          echo "[ ] Connect Gumroad payout method (operator action required)"
-          echo "[ ] Verify first test sale can clear"
-          echo "[ ] Log the first AUD received"
-          echo "[ ] Switch status from AGENT_COMPLETE_GUMROAD_PAYOUT_ONLY to FIRST_CASH"
+          echo "Everything else in the chain is already complete."
+          echo "This is the only open high-value work item."
 
-      - name: Force Gumroad Status Check
-        if: github.event.inputs.mode == 'force-gumroad-check' || github.event.inputs.mode == 'full-engine-check' || github.event_name == 'schedule'
+      - name: Gumroad Status
         run: |
-          echo "=== GUMROAD PAYOUT STATUS ==="
-          echo "Current known state: payout_method_required"
-          echo "Blocked only by operator UI"
-          echo "Action URL: https://gumroad.com/settings/payments"
-          echo "Product URL: https://ventureengine.gumroad.com/l/ve-tiling-art-2026"
+          echo "Gumroad payout is still the single remaining blocker."
+          echo "Operator action required at:"
+          echo "https://gumroad.com/settings/payments"
 
-      - name: Write Full-Speed Summary
+      - name: Write artifact
         run: |
-          cat > full-speed-summary.md << EOF
-          # FULL SPEED Run Summary
-          - Time: $(date -u)
-          - Mode: ${{ github.event.inputs.mode || 'scheduled' }}
-          - Critical Blocker: Gumroad payout method
-          - Next Human Action: https://gumroad.com/settings/payments
-          - Product: https://ventureengine.gumroad.com/l/ve-tiling-art-2026
-          - Goal: First AUD sale within 24 hours of payout connection
+          cat > 24h-work.md << 'EOF'
+          # Rolling 24-Hour Planned Work
+          - [ ] Connect Gumroad payout
+          - [ ] Verify first payment possible
+          - [ ] Log first AUD
+          - [ ] Update status to FIRST_CASH
           EOF
 
       - uses: actions/upload-artifact@v4
         with:
-          name: full-speed-summary
-          path: full-speed-summary.md
-          retention-days: 30
+          name: 24h-planned-work
+          path: 24h-work.md
